@@ -161,19 +161,23 @@ export default function Home() {
       </header>
 
       {/* Hero + search */}
-      <section className="bg-gradient-to-b from-brand-50 to-slate-50">
-        <div className="mx-auto max-w-6xl px-4 py-12 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+      <section>
+        <div className="mx-auto max-w-6xl px-4 pb-10 pt-16 text-center sm:pt-20">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-3 py-1 text-xs font-medium text-brand-700 shadow-sm backdrop-blur">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Find roommates near you, anywhere
+          </span>
+          <h1 className="mx-auto mt-5 max-w-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-brand-700 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl">
             Find your next roommate, right where you want to live
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-slate-600">
+          <p className="mx-auto mt-4 max-w-xl text-lg text-slate-600">
             Search by your location or any city. We&apos;ll show you people with
             rooms and people looking — sorted by distance.
           </p>
 
           <form
             onSubmit={searchPlace}
-            className="mx-auto mt-8 max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+            className="mx-auto mt-8 max-w-3xl rounded-2xl border border-white/70 bg-white/80 p-4 shadow-xl shadow-brand-500/10 ring-1 ring-slate-900/5 backdrop-blur-md"
           >
             <div className="flex flex-col gap-3 sm:flex-row">
               <div className="flex flex-1 items-center gap-2 rounded-lg border border-slate-300 px-3">
