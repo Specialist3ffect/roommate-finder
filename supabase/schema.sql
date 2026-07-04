@@ -8,6 +8,7 @@
 create table if not exists public.listings (
   id          uuid primary key default gen_random_uuid(),
   created_at  timestamptz not null default now(),
+  user_id     uuid not null references auth.users (id) on delete cascade,
   kind        text not null check (kind in ('has-room', 'needs-room')),
   name        text not null,
   age         int  not null default 25 check (age between 18 and 120),
@@ -42,22 +43,35 @@ create index if not exists messages_listing_id_idx on public.messages (listing_i
 -- ---------------------------------------------------------------------------
 -- Row Level Security
 -- ---------------------------------------------------------------------------
--- NOTE: this demo policy allows anonymous reads/inserts so the app works
--- without auth. For production, add Supabase Auth and scope writes to
--- auth.uid(), and do NOT expose message reads publicly.
 alter table public.listings enable row level security;
 alter table public.messages enable row level security;
 
+-- Listings: anyone can read; only the authenticated owner can create/edit/delete
+-- their own listings.
 drop policy if exists "listings public read" on public.listings;
 create policy "listings public read"
   on public.listings for select using (true);
 
-drop policy if exists "listings anon insert" on public.listings;
-create policy "listings anon insert"
-  on public.listings for insert with check (true);
+drop policy if exists "listings owner insert" on public.listings;
+create policy "listings owner insert"
+  on public.listings for insert
+  with check (auth.uid() = user_id);
 
--- Messages: anyone may send (insert) an inquiry, but nobody can read them via
--- the anon key. Read them from a trusted server context / the dashboard only.
+drop policy if exists "listings owner update" on public.listings;
+create policy "listings owner update"
+  on public.listings for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "listings owner delete" on public.listings;
+create policy "listings owner delete"
+  on public.listings for delete
+  using (auth.uid() = user_id);
+
+-- Messages: anyone may send (insert) an inquiry so non-registered people can
+-- reach out, but nobody can read them via the anon key. Read them from a
+-- trusted server context / the dashboard only. Tighten to authenticated-only
+-- if you'd rather require sign-in to contact.
 drop policy if exists "messages anon insert" on public.messages;
 create policy "messages anon insert"
   on public.messages for insert with check (true);

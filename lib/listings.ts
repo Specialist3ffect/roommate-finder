@@ -94,9 +94,13 @@ export async function fetchUserListings(): Promise<Listing[]> {
  */
 export async function createUserListing(listing: Listing): Promise<Listing> {
   if (isSupabaseConfigured && supabase) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) throw new Error("Please sign in to post a listing.");
     const { data, error } = await supabase
       .from("listings")
-      .insert(listingToRow(listing))
+      .insert({ ...listingToRow(listing), user_id: user.id })
       .select()
       .single();
     if (error) throw new Error(error.message);

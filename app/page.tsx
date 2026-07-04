@@ -9,6 +9,8 @@ import { fetchUserListings } from "@/lib/listings";
 import ListingCard from "@/components/ListingCard";
 import PostListingModal from "@/components/PostListingModal";
 import ContactModal from "@/components/ContactModal";
+import AuthModal from "@/components/AuthModal";
+import { useAuth } from "@/components/AuthProvider";
 
 // Leaflet touches `window`, so load the map only in the browser.
 const ResultsMap = dynamic(() => import("@/components/ResultsMap"), {
@@ -35,6 +37,17 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
   const [contactListing, setContactListing] = useState<Listing | null>(null);
   const [view, setView] = useState<View>("grid");
+  const [authOpen, setAuthOpen] = useState(false);
+  const { configured, user, signOut } = useAuth();
+
+  // When auth is required (Supabase configured), only allow posting once signed in.
+  function handlePostClick() {
+    if (configured && !user) {
+      setAuthOpen(true);
+    } else {
+      setModalOpen(true);
+    }
+  }
 
   // Load user-posted listings from Supabase (or localStorage in demo mode).
   useEffect(() => {
@@ -116,12 +129,34 @@ export default function Home() {
             </span>
             <span className="text-lg font-bold tracking-tight">RoomMatch</span>
           </div>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-600"
-          >
-            + Post a listing
-          </button>
+          <div className="flex items-center gap-2">
+            {configured && user && (
+              <span className="hidden text-sm text-slate-500 sm:inline">
+                {user.email}
+              </span>
+            )}
+            {configured && user ? (
+              <button
+                onClick={() => signOut()}
+                className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              >
+                Sign out
+              </button>
+            ) : configured ? (
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              >
+                Sign in
+              </button>
+            ) : null}
+            <button
+              onClick={handlePostClick}
+              className="rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-600"
+            >
+              + Post a listing
+            </button>
+          </div>
         </div>
       </header>
 
@@ -313,6 +348,8 @@ export default function Home() {
         listing={contactListing}
         onClose={() => setContactListing(null)}
       />
+
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </main>
   );
 }
