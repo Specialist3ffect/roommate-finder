@@ -20,10 +20,10 @@ export default function ListingCard({
 }) {
   const isHasRoom = listing.kind === "has-room";
   return (
-    <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    <article className="flex flex-col rounded-2xl border border-white/70 bg-white/80 p-5 shadow-lg shadow-slate-900/5 ring-1 ring-slate-900/5 backdrop-blur-md transition duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-500/10">
       <div className="flex items-start gap-3">
         <div
-          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white shadow-sm ring-2 ring-white"
           style={{ backgroundColor: listing.avatarColor }}
         >
           {initials(listing.name)}

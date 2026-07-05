@@ -56,7 +56,7 @@ export default function ContactModal({
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <div className="relative z-10 w-full max-w-md rounded-2xl bg-white/95 p-6 shadow-2xl ring-1 ring-slate-900/5 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">
             Message {listing.name}
