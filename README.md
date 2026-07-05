@@ -2,6 +2,8 @@
 
 A Next.js (App Router) + TypeScript + Tailwind app for finding roommates by location.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSpecialist3ffect%2Froommate-finder&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY&envDescription=Supabase%20keys%20—%20leave%20blank%20to%20deploy%20in%20demo%20mode&project-name=roommate-finder&repository-name=roommate-finder)
+
 ## Features
 - **Geo-search** — "Use my location" (browser geolocation) or type any city/address
 - **Distance-sorted results** within an adjustable radius (Haversine math)
