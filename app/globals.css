@@ -13,16 +13,17 @@ html {
 body {
   @apply text-slate-900 antialiased;
   position: relative;
-  /* Vivid diagonal color wash as the base so the whole page reads as colorful. */
+  /* Sunset color wash: violet dusk up top melting down into coral, orange and gold. */
   background:
-    linear-gradient(135deg, #dbeafe 0%, #ede9fe 28%, #fce7f3 52%, #cffafe 76%, #dbeafe 100%);
+    linear-gradient(160deg, #ede9fe 0%, #fbe7f3 22%, #ffe3e1 44%, #ffe4cc 66%, #fff2cf 100%);
   background-attachment: fixed;
 }
 
 /*
- * Layer 1 — a bold multi-color "aurora" of blurred color blobs that drift
- * slowly behind all content. Saturated, higher-opacity blobs for a lively,
- * genuinely colorful backdrop (cards sit on frosted glass, so text stays crisp).
+ * Layer 1 — a warm "sunset" aurora of blurred color blobs that drift slowly
+ * behind all content: magenta/purple dusk high up, coral and orange through the
+ * middle, golden amber along the horizon. Cards sit on frosted glass, so text
+ * stays crisp.
  */
 body::before {
   content: "";
@@ -30,18 +31,18 @@ body::before {
   inset: -25%;
   z-index: -3;
   background:
-    radial-gradient(34rem 34rem at 8% -4%, rgba(59, 130, 246, 0.6), transparent 58%),
-    radial-gradient(30rem 30rem at 90% 2%, rgba(20, 184, 166, 0.55), transparent 58%),
-    radial-gradient(34rem 34rem at 98% 55%, rgba(139, 92, 246, 0.55), transparent 60%),
-    radial-gradient(40rem 40rem at 58% 104%, rgba(236, 72, 153, 0.5), transparent 60%),
-    radial-gradient(30rem 30rem at 14% 98%, rgba(245, 158, 11, 0.45), transparent 58%),
-    radial-gradient(28rem 28rem at 40% 26%, rgba(6, 182, 212, 0.42), transparent 58%);
+    radial-gradient(34rem 34rem at 6% -6%, rgba(124, 58, 237, 0.55), transparent 58%),
+    radial-gradient(32rem 32rem at 92% 0%, rgba(219, 39, 119, 0.55), transparent 58%),
+    radial-gradient(34rem 34rem at 98% 52%, rgba(244, 63, 94, 0.55), transparent 60%),
+    radial-gradient(42rem 42rem at 60% 104%, rgba(249, 115, 22, 0.55), transparent 60%),
+    radial-gradient(34rem 34rem at 12% 98%, rgba(250, 204, 21, 0.5), transparent 58%),
+    radial-gradient(28rem 28rem at 40% 30%, rgba(251, 146, 60, 0.42), transparent 58%);
   filter: saturate(1.4);
   animation: aurora-drift 26s ease-in-out infinite alternate;
 }
 
 /*
- * Layer 2 — a second, counter-drifting set of blobs for depth and richer
+ * Layer 2 — a second, counter-drifting set of warm blobs for depth and richer
  * color mixing where they overlap.
  */
 body::after {
@@ -50,10 +51,10 @@ body::after {
   inset: -25%;
   z-index: -2;
   background:
-    radial-gradient(26rem 26rem at 72% 6%, rgba(99, 102, 241, 0.5), transparent 58%),
-    radial-gradient(30rem 30rem at 2% 44%, rgba(16, 185, 129, 0.45), transparent 60%),
-    radial-gradient(24rem 24rem at 84% 90%, rgba(217, 70, 239, 0.45), transparent 58%),
-    radial-gradient(24rem 24rem at 50% 60%, rgba(56, 189, 248, 0.36), transparent 60%);
+    radial-gradient(26rem 26rem at 74% 8%, rgba(236, 72, 153, 0.5), transparent 58%),
+    radial-gradient(30rem 30rem at 2% 46%, rgba(168, 85, 247, 0.4), transparent 60%),
+    radial-gradient(26rem 26rem at 86% 92%, rgba(251, 191, 36, 0.5), transparent 58%),
+    radial-gradient(24rem 24rem at 48% 62%, rgba(248, 113, 113, 0.4), transparent 60%);
   filter: saturate(1.35);
   mix-blend-mode: multiply;
   animation: aurora-drift-2 32s ease-in-out infinite alternate;
