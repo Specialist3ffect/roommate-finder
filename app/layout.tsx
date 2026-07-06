@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
+import FloatingBeds from "@/components/FloatingBeds";
 
 export const metadata: Metadata = {
   title: "RoomMatch — Find your next roommate nearby",
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="bg-grid" aria-hidden="true" />
+        <FloatingBeds />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
