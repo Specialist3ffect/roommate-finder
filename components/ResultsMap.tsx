@@ -74,8 +74,8 @@ export default function ResultsMap({
           center={[origin.lat, origin.lng]}
           radius={9}
           pathOptions={{
-            color: "#1f57e0",
-            fillColor: "#2f6df6",
+            color: "#bd3d18",
+            fillColor: "#f5683c",
             fillOpacity: 0.9,
             weight: 2,
           }}
