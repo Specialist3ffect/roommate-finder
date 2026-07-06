@@ -16,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <div className="bg-grid" aria-hidden="true" />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
