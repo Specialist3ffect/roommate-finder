@@ -93,7 +93,7 @@ export default function ResultsMap({
             color: "#fff",
             weight: 2,
             fillColor:
-              listing.kind === "has-room" ? "#10b981" : "#2f6df6",
+              listing.kind === "has-room" ? "#f59e0b" : "#a855f7",
             fillOpacity: 0.9,
           }}
         >
