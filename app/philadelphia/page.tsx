@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CITIES } from "@/lib/cities";
 import CityLanding from "@/components/CityLanding";
 
-const city = CITIES.austin;
+const city = CITIES.philadelphia;
 
 export const metadata: Metadata = {
   title: city.metaTitle,
@@ -17,6 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AustinPage() {
+export default function PhiladelphiaPage() {
   return <CityLanding config={city} />;
 }
