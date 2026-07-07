@@ -18,6 +18,8 @@ interface ListingRow {
   move_in: string | null;
   tags: string[];
   avatar_color: string;
+  verified?: boolean;
+  boosted?: boolean;
 }
 
 function rowToListing(r: ListingRow): Listing {
@@ -35,6 +37,8 @@ function rowToListing(r: ListingRow): Listing {
     moveIn: r.move_in ?? "",
     tags: r.tags ?? [],
     avatarColor: r.avatar_color,
+    verified: r.verified ?? false,
+    boosted: r.boosted ?? false,
   };
 }
 
@@ -52,6 +56,7 @@ function listingToRow(l: Listing): Omit<ListingRow, "id"> {
     move_in: l.moveIn || null,
     tags: l.tags,
     avatar_color: l.avatarColor,
+    verified: l.verified ?? false,
   };
 }
 

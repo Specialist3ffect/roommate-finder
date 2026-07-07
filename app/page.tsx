@@ -6,6 +6,7 @@ import type { Coords, Listing, ListingKind } from "@/lib/types";
 import { SEED_LISTINGS } from "@/lib/data";
 import { distanceMiles, geocode, reverseGeocode } from "@/lib/geo";
 import { fetchUserListings } from "@/lib/listings";
+import { startBoost } from "@/lib/boost";
 import ListingCard from "@/components/ListingCard";
 import PostListingModal from "@/components/PostListingModal";
 import ContactModal from "@/components/ContactModal";
@@ -38,7 +39,36 @@ export default function Home() {
   const [contactListing, setContactListing] = useState<Listing | null>(null);
   const [view, setView] = useState<View>("grid");
   const [authOpen, setAuthOpen] = useState(false);
+  const [boostedIds, setBoostedIds] = useState<Set<string>>(new Set());
   const { configured, user, signOut } = useAuth();
+
+  async function runSearch(query: string) {
+    if (!query.trim()) return;
+    setLocating(true);
+    setStatus(null);
+    const coords = await geocode(query.trim());
+    setLocating(false);
+    if (!coords) {
+      setStatus("Couldn't find that place. Try a city and state/country.");
+      return;
+    }
+    setOrigin(coords);
+  }
+
+  async function handleBoost(listing: Listing) {
+    try {
+      const { demo } = await startBoost(listing);
+      if (demo) {
+        setBoostedIds((prev) => new Set(prev).add(listing.id));
+        setStatus(
+          `Demo: “${listing.headline}” is now Featured. Add your Stripe keys to charge for this.`
+        );
+      }
+      // Real mode redirects to Stripe Checkout inside startBoost().
+    } catch {
+      setStatus("Couldn't start checkout. Please try again.");
+    }
+  }
 
   // When auth is required (Supabase configured), only allow posting once signed in.
   function handlePostClick() {
@@ -56,9 +86,32 @@ export default function Home() {
       .catch(() => setUserListings([]));
   }, []);
 
+  // Handle URL params: ?place= (auto-search, e.g. from a city landing page)
+  // and ?boosted= (return from Stripe Checkout success).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const place = params.get("place");
+    const boosted = params.get("boosted");
+    if (boosted) {
+      setBoostedIds((prev) => new Set(prev).add(boosted));
+      setStatus("Payment received — your listing is now Featured for 7 days. 🎉");
+    }
+    if (place) {
+      setPlaceQuery(place);
+      runSearch(place);
+    }
+    if (place || boosted || params.get("boost_cancelled")) {
+      window.history.replaceState({}, "", "/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const allListings = useMemo(
-    () => [...userListings, ...SEED_LISTINGS],
-    [userListings]
+    () =>
+      [...userListings, ...SEED_LISTINGS].map((l) =>
+        boostedIds.has(l.id) ? { ...l, boosted: true } : l
+      ),
+    [userListings, boostedIds]
   );
 
   async function useMyLocation() {
@@ -84,18 +137,9 @@ export default function Home() {
     );
   }
 
-  async function searchPlace(e: React.FormEvent) {
+  function searchPlace(e: React.FormEvent) {
     e.preventDefault();
-    if (!placeQuery.trim()) return;
-    setLocating(true);
-    setStatus(null);
-    const coords = await geocode(placeQuery.trim());
-    setLocating(false);
-    if (!coords) {
-      setStatus("Couldn't find that place. Try a city and state/country.");
-      return;
-    }
-    setOrigin(coords);
+    runSearch(placeQuery);
   }
 
   const results = useMemo(() => {
@@ -113,6 +157,9 @@ export default function Home() {
         return true;
       })
       .sort((a, b) => {
+        // Featured (boosted) listings always rank first.
+        const boostDiff = Number(!!b.listing.boosted) - Number(!!a.listing.boosted);
+        if (boostDiff !== 0) return boostDiff;
         if (a.distance === null || b.distance === null) return 0;
         return a.distance - b.distance;
       });
@@ -328,6 +375,7 @@ export default function Home() {
                 listing={listing}
                 distance={distance}
                 onMessage={setContactListing}
+                onBoost={handleBoost}
               />
             ))}
           </div>
@@ -342,6 +390,7 @@ export default function Home() {
       <PostListingModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
+        autoVerified={configured && !!user}
         onCreate={(l) => {
           setUserListings((prev) => [l, ...prev]);
           setModalOpen(false);

@@ -34,6 +34,7 @@ export const SEED_LISTINGS: Listing[] = [
     moveIn: "2026-07-01",
     tags: ["Non-smoker", "Pet-friendly", "LGBTQ+ friendly"],
     avatarColor: color(0),
+    verified: true,
   },
   {
     id: "s2",
@@ -109,6 +110,8 @@ export const SEED_LISTINGS: Listing[] = [
     moveIn: "2026-07-10",
     tags: ["Musician", "Pet-friendly", "Backyard"],
     avatarColor: color(5),
+    verified: true,
+    boosted: true,
   },
   {
     id: "s7",
@@ -124,6 +127,7 @@ export const SEED_LISTINGS: Listing[] = [
     moveIn: "2026-08-01",
     tags: ["WFH friendly", "Hiker", "Non-smoker"],
     avatarColor: color(6),
+    verified: true,
   },
   {
     id: "s8",

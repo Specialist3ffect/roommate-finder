@@ -20,7 +20,10 @@ create table if not exists public.listings (
   budget      int  not null default 1000 check (budget >= 0),
   move_in     date,
   tags        text[] not null default '{}',
-  avatar_color text not null default '#1f57e0'
+  avatar_color text not null default '#f5683c',
+  verified    boolean not null default false,
+  boosted     boolean not null default false,
+  boosted_until timestamptz
 );
 
 create index if not exists listings_created_at_idx on public.listings (created_at desc);

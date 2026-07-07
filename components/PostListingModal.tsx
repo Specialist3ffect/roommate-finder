@@ -9,10 +9,12 @@ export default function PostListingModal({
   open,
   onClose,
   onCreate,
+  autoVerified = false,
 }: {
   open: boolean;
   onClose: () => void;
   onCreate: (listing: Listing) => void;
+  autoVerified?: boolean;
 }) {
   const [kind, setKind] = useState<ListingKind>("has-room");
   const [name, setName] = useState("");
@@ -22,6 +24,7 @@ export default function PostListingModal({
   const [city, setCity] = useState("");
   const [budget, setBudget] = useState("");
   const [tags, setTags] = useState("");
+  const [verify, setVerify] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +62,8 @@ export default function PostListingModal({
         .map((t) => t.trim())
         .filter(Boolean)
         .slice(0, 4),
-      avatarColor: "#1f57e0",
+      avatarColor: "#f5683c",
+      verified: autoVerified || verify,
     };
 
     setSubmitting(true);
@@ -184,6 +188,27 @@ export default function PostListingModal({
             value={tags}
             onChange={(e) => setTags(e.target.value)}
           />
+
+          {autoVerified ? (
+            <p className="flex items-center gap-1.5 rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-700">
+              <span aria-hidden>✓</span> Your account is verified — your listing
+              gets a Verified badge.
+            </p>
+          ) : (
+            <label className="flex items-start gap-2 rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-800">
+              <input
+                type="checkbox"
+                checked={verify}
+                onChange={(e) => setVerify(e.target.checked)}
+                className="mt-0.5 accent-sky-600"
+              />
+              <span>
+                <strong>Verify my email</strong> to earn a{" "}
+                <span className="font-semibold">✓ Verified</span> badge —
+                verified listings get up to 3× more replies.
+              </span>
+            </label>
+          )}
 
           {error && <p className="text-sm text-red-600">{error}</p>}
 

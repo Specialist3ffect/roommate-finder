@@ -14,6 +14,8 @@ export interface Listing {
   moveIn: string; // ISO-ish date string
   tags: string[];
   avatarColor: string;
+  verified?: boolean; // owner passed identity/email verification
+  boosted?: boolean; // paid to appear at the top ("Featured")
 }
 
 export interface Coords {
